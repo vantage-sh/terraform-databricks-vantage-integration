@@ -77,17 +77,14 @@ data "databricks_schema" "system_billing" {
 }
 
 # -----------------------------------------------------------------------------
-# Grant access to the 'system.billing' schema so the service principal can
-# query billing data.
+# Grant access to the 'system.billing' schema so the service principal can query billing data.
 # -----------------------------------------------------------------------------
-resource "databricks_grants" "system_billing_grants" {
+resource "databricks_grant" "system_billing_grants" {
   provider = databricks.workspace
 
   schema = data.databricks_schema.system_billing.id
-  grant {
-    principal  = databricks_service_principal.vantage_billing_sp.application_id
-    privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
-  }
+  principal  = databricks_service_principal.vantage_billing_sp.application_id
+  privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
 }
 
 # -----------------------------------------------------------------------------
@@ -103,19 +100,16 @@ data "databricks_schema" "system_compute" {
 # -----------------------------------------------------------------------------
 # Grant access to the 'system.compute' schema.
 # -----------------------------------------------------------------------------
-resource "databricks_grants" "system_compute_grants" {
+resource "databricks_grant" "system_compute_grants" {
   provider = databricks.workspace
 
   schema = data.databricks_schema.system_compute.id
-  grant {
-    principal  = databricks_service_principal.vantage_billing_sp.application_id
-    privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
-  }
+  principal  = databricks_service_principal.vantage_billing_sp.application_id
+  privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
 }
 
 # -----------------------------------------------------------------------------
-# Reference to the 'system.access' schema, used for getting metadata about
-# workspace metadata and naming.
+# Reference to the 'system.access' schema, used for audit and access log insights.
 # -----------------------------------------------------------------------------
 data "databricks_schema" "system_access" {
   provider = databricks.workspace
@@ -124,14 +118,12 @@ data "databricks_schema" "system_access" {
 }
 
 # -----------------------------------------------------------------------------
-# Grant access to the 'system.access' schema for usage and access.
+# Grant access to the 'system.access' schema for usage and access auditing.
 # -----------------------------------------------------------------------------
-resource "databricks_grants" "system_access_grants" {
+resource "databricks_grant" "system_access_grants" {
   provider = databricks.workspace
 
   schema = data.databricks_schema.system_access.id
-  grant {
-    principal  = databricks_service_principal.vantage_billing_sp.application_id
-    privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
-  }
+  principal  = databricks_service_principal.vantage_billing_sp.application_id
+  privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
 }
