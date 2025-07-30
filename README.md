@@ -1,5 +1,7 @@
 # terraform-databricks-vantage-integration
 
+The resources will be used for V2 of Vantage's Databricks integration. See our [official documentation](https://docs.vantage.sh/connecting_databricks/) for more details. 
+
 This module provisions all resources and permissions required to integrate your Databricks account with Vantage.
 
 At a high level, the module will:
