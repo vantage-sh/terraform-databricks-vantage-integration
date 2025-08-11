@@ -68,6 +68,34 @@ resource "databricks_permissions" "sp_usage_of_warehouse" {
 }
 
 # -----------------------------------------------------------------------------
+# Grant the service principal permission to create tables in the SQL Warehouse.
+# -----------------------------------------------------------------------------
+resource "databricks_workspace_conf" "enable_ip_access_lists" {
+  count = var.enable_ip_allowlist ? 1 : 0
+  provider = databricks.workspace
+
+  custom_config = {
+    "enableIpAccessLists" = true
+  }
+}
+
+resource "databricks_ip_access_list" "vantage_static_ips" {
+  count = var.enable_ip_allowlist ? 1 : 0
+  provider = databricks.workspace
+
+  label     = "allow_in"
+  list_type = "ALLOW"
+  ip_addresses = [
+    "54.87.66.45",
+    "3.95.43.133",
+    "54.162.3.72",
+    "44.199.143.63",
+    "3.218.103.23"
+  ]
+  depends_on = [databricks_workspace_conf.enable_ip_access_lists]
+}
+
+# -----------------------------------------------------------------------------
 # Reference to the 'system.billing' schema, which contains billing data.
 # -----------------------------------------------------------------------------
 data "databricks_schema" "system_billing" {
@@ -123,7 +151,7 @@ data "databricks_schema" "system_access" {
 resource "databricks_grant" "system_access_grants" {
   provider = databricks.workspace
 
-  schema = data.databricks_schema.system_access.id
-  principal  = databricks_service_principal.vantage_billing_sp.application_id
+  schema    = data.databricks_schema.system_access.id
+  principal = databricks_service_principal.vantage_billing_sp.application_id
   privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
 }
