@@ -1,0 +1,24 @@
+{
+  "name": "terraform-databricks-vantage-integration",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Terraform module for Databricks Vantage integration",
+  "scripts": {
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.0.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "semantic-release": "^25.0.0"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github"
+    ]
+  }
+}
