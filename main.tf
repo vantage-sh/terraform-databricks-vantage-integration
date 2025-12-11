@@ -12,8 +12,7 @@ terraform {
   required_providers {
     # tflint-ignore: terraform_required_providers
     databricks = {
-      source                = "databricks/databricks"
-      configuration_aliases = [databricks.workspace, databricks.account]
+      source = "databricks/databricks"
     }
   }
   required_version = ">= 1.0"
