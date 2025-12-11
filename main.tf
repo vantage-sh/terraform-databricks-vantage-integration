@@ -8,23 +8,6 @@
 # Intended for use by customers integrating with Vantage.
 # -----------------------------------------------------------------------------
 
-# Workspace-level provider (used for SQL Warehouse and permissions)
-provider "databricks" {
-  alias = "workspace"
-  host  = "$YOUR_WORKSPACE_URL_HERE"
-  # authenticate to your Databricks workspace...
-  # https://registry.terraform.io/providers/databricks/databricks/latest/docs#authentication
-}
-
-# Account-level provider (used for Service Principal creation)
-provider "databricks" {
-  alias = "account"
-  host = "https://accounts.cloud.databricks.com"
-  account_id = "$YOUR_ACCOUNT_ID_HERE"
-  # authenticate to your Databricks account...
-  # https://registry.terraform.io/providers/databricks/databricks/latest/docs#authentication
-}
-
 terraform {
   required_providers {
     databricks = {
