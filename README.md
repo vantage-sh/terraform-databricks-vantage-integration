@@ -14,6 +14,8 @@ At a high level, the module will:
 After applying this module, the outputs (e.g., client ID, secret, SQL warehouse ID) will be used to configure the
 [Databricks integration in the Vantage UI](https://console.vantage.sh/settings/databricks?connect=true).
 
+Optionally, you can use `enable_ip_allowlist = true` to restrict access to workspace to Vantage's static IP addresses. 
+
 ## Databricks Provider Configurations
 You will need to define two Databricks providers in your Terraform configuration, one for the account level and one for 
 the workspace level.
@@ -32,13 +34,5 @@ provider "databricks" {
   host = "https://accounts.cloud.databricks.com"
   account_id = "your_account_id"
   // authenticate to your Databricks account...
-}
-
-module "databricks_billing" {
-  providers = {
-    databricks.workspace = databricks.workspace
-    databricks.account = databricks.account
-  }
-  source           = "path_to_your_module"
 }
 ```

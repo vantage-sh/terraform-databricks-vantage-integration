@@ -94,7 +94,7 @@ resource "databricks_permissions" "sp_usage_of_warehouse" {
 }
 
 # -----------------------------------------------------------------------------
-# Grant the service principal permission to create tables in the SQL Warehouse.
+# Enable IP access lists for Vantage IP Addresses
 # -----------------------------------------------------------------------------
 resource "databricks_workspace_conf" "enable_ip_access_lists" {
   count = var.enable_ip_allowlist ? 1 : 0
@@ -184,7 +184,8 @@ resource "databricks_grant" "system_access_grants" {
 }
 
 # -----------------------------------------------------------------------------
-# Grant access to the 'system.access' schema for usage and access auditing.
+# Outputs to enter in Vantage Console
+# https://console.vantage.sh/settings/databricks?connect=true
 # -----------------------------------------------------------------------------
 
 output "service_principal_id" {
