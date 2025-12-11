@@ -22,13 +22,17 @@ Optionally, you can use `enable_ip_allowlist = true` to restrict access to works
 You will need to define a Databricks providers in your Terraform configuration, specifically a workspace level provider.
 
 ```hcl
-# Workspace-level provider (used for SQL Warehouse and permissions)
+# Workspace-level provider
 provider "databricks" {
-  host  = "your_workspace_url"
-  // authenticate to your Databricks workspace...
+  host  = "$YOUR_WORKSPACE_URL"
+  # authenticate to your Databricks workspace...
+  # https://registry.terraform.io/providers/databricks/databricks/latest/docs#authentication
 }
 
 module "databricks_vantage_integration" {
   source = "github.com/vantage.sh/terraform-databricks-vantage-integration"
+  
+  # if you use ssh based git auth
+  # source = "git::https://github.com/vantage-sh/terraform-databricks-vantage-integration.git"
 }
 ```
