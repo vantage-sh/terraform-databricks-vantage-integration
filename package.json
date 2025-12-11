@@ -6,6 +6,11 @@
   "scripts": {
     "release": "semantic-release"
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "devDependencies": {
     "@commitlint/cli": "^20.0.0",
     "@commitlint/config-conventional": "^20.0.0",
@@ -17,7 +22,6 @@
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
       "@semantic-release/github"
     ]
   }
