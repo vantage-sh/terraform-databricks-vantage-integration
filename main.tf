@@ -35,6 +35,15 @@ terraform {
 }
 
 # -----------------------------------------------------------------------------
+# Variables
+# -----------------------------------------------------------------------------
+variable "enable_ip_allowlist" {
+  type = bool
+  default = false
+  description = "Enable IP allowlist for Vantage IP Addresses"
+}
+
+# -----------------------------------------------------------------------------
 # Create a service principal for Vantage to use within the Databricks workspace.
 # -----------------------------------------------------------------------------
 resource "databricks_service_principal" "vantage_billing_sp" {
@@ -82,6 +91,35 @@ resource "databricks_permissions" "sp_usage_of_warehouse" {
     service_principal_name = databricks_service_principal.vantage_billing_sp.application_id
     permission_level = "CAN_USE"
   }
+}
+
+# -----------------------------------------------------------------------------
+# Enable IP access lists for Vantage IP Addresses
+# -----------------------------------------------------------------------------
+resource "databricks_workspace_conf" "enable_ip_access_lists" {
+  count = var.enable_ip_allowlist ? 1 : 0
+  provider = databricks.workspace
+
+  custom_config = {
+    "enableIpAccessLists" = true
+  }
+}
+
+resource "databricks_ip_access_list" "vantage_static_ips" {
+  count = var.enable_ip_allowlist ? 1 : 0
+  provider = databricks.workspace
+
+  label     = "allow_in"
+  list_type = "ALLOW"
+  # https://docs.vantage.sh/security/#:~:text=Does%20Vantage%20use%20fixed%20IP%20addresses%20when%20connecting%20to%20external%20providers%2C%20such%20as%20AWS%20or%20Azure%3F
+  ip_addresses = [
+    "54.87.66.45",
+    "3.95.43.133",
+    "54.162.3.72",
+    "44.199.143.63",
+    "3.218.103.23"
+  ]
+  depends_on = [databricks_workspace_conf.enable_ip_access_lists]
 }
 
 # -----------------------------------------------------------------------------
@@ -146,7 +184,8 @@ resource "databricks_grant" "system_access_grants" {
 }
 
 # -----------------------------------------------------------------------------
-# Grant access to the 'system.access' schema for usage and access auditing.
+# Outputs to enter in Vantage Console
+# https://console.vantage.sh/settings/databricks?connect=true
 # -----------------------------------------------------------------------------
 
 output "service_principal_id" {
