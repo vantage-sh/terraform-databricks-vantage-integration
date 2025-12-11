@@ -8,6 +8,23 @@
 # Intended for use by customers integrating with Vantage.
 # -----------------------------------------------------------------------------
 
+# Workspace-level provider (used for SQL Warehouse and permissions)
+provider "databricks" {
+  alias = "workspace"
+  host  = "$YOUR_WORKSPACE_URL_HERE"
+  # authenticate to your Databricks workspace...
+  # https://registry.terraform.io/providers/databricks/databricks/latest/docs#authentication
+}
+
+# Account-level provider (used for Service Principal creation)
+provider "databricks" {
+  alias = "account"
+  host = "https://accounts.cloud.databricks.com"
+  account_id = "$YOUR_ACCOUNT_ID_HERE"
+  # authenticate to your Databricks account...
+  # https://registry.terraform.io/providers/databricks/databricks/latest/docs#authentication
+}
+
 terraform {
   required_providers {
     databricks = {
@@ -84,7 +101,7 @@ resource "databricks_grant" "system_billing_grants" {
 
   schema = data.databricks_schema.system_billing.id
   principal  = databricks_service_principal.vantage_billing_sp.application_id
-  privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
+  privileges = ["USE_SCHEMA", "SELECT"]
 }
 
 # -----------------------------------------------------------------------------
@@ -105,7 +122,7 @@ resource "databricks_grant" "system_compute_grants" {
 
   schema = data.databricks_schema.system_compute.id
   principal  = databricks_service_principal.vantage_billing_sp.application_id
-  privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
+  privileges = ["USE_SCHEMA", "SELECT"]
 }
 
 # -----------------------------------------------------------------------------
@@ -125,5 +142,25 @@ resource "databricks_grant" "system_access_grants" {
 
   schema = data.databricks_schema.system_access.id
   principal  = databricks_service_principal.vantage_billing_sp.application_id
-  privileges = ["USE_SCHEMA", "EXECUTE", "READ_VOLUME", "SELECT"]
+  privileges = ["USE_SCHEMA", "SELECT"]
+}
+
+# -----------------------------------------------------------------------------
+# Grant access to the 'system.access' schema for usage and access auditing.
+# -----------------------------------------------------------------------------
+
+output "service_principal_id" {
+  description = "Client ID of the Vantage billing service principal"
+  value       = databricks_service_principal.vantage_billing_sp.application_id
+}
+
+output "service_principal_secret" {
+  description = "Secret of the Vantage billing service principal"
+  value       = databricks_service_principal_secret.vantage_billing_sp_credentials.secret
+  sensitive   = true
+}
+
+output "vantage_billing_warehouse_id" {
+  description = "ID of SQL Warehouse for Vantage billing"
+  value = databricks_sql_endpoint.vantage_billing_warehouse.id
 }
