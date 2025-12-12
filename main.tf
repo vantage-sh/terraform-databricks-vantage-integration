@@ -11,7 +11,7 @@
 terraform {
   required_providers {
     databricks = {
-      source  = "databricks/databricks"
+      source = "databricks/databricks"
       # https://github.com/databricks/terraform-provider-databricks/releases/tag/v1.86.0
       # this version allows for service principal creation at the workspace level
       version = ">= 1.86.0"
