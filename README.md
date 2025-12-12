@@ -29,10 +29,7 @@ provider "databricks" {
   # https://registry.terraform.io/providers/databricks/databricks/latest/docs#authentication
 }
 
-module "databricks_vantage_integration" {
-  source = "github.com/vantage.sh/terraform-databricks-vantage-integration"
-  
-  # if you use ssh based git authentication
-  # source = "git::https://github.com/vantage-sh/terraform-databricks-vantage-integration.git"
-}
+ module "databricks_vantage_integration" {
+   source  = "vantage-sh/vantage-integration/databricks"
+ }
 ```
