@@ -32,7 +32,7 @@ provider "databricks" {
 module "databricks_vantage_integration" {
   source = "github.com/vantage.sh/terraform-databricks-vantage-integration"
   
-  # if you use ssh based git auth
+  # if you use ssh based git authentication
   # source = "git::https://github.com/vantage-sh/terraform-databricks-vantage-integration.git"
 }
 ```
