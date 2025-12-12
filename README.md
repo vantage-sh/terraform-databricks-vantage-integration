@@ -6,7 +6,7 @@ This module provisions all resources and permissions required to integrate your 
 
 At a high level, the module will:
 
-1. Create a Service Principal at the account level
+1. Create a Service Principal
 2. Create OAuth credentials for the Service Principal
 3. Create a SQL Warehouse
 4. Assign the Service Principal permissions to use the SQL Warehouse
