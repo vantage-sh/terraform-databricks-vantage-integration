@@ -9,7 +9,21 @@
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
-    ]
+    ],
+    "rules": {
+      "subject-full-stop": [
+        2,
+        "always",
+        "."
+      ],
+      "subject-case": [
+        2,
+        "always",
+        [
+          "sentence-case"
+        ]
+      ]
+    }
   },
   "devDependencies": {
     "@commitlint/cli": "^20.0.0",
@@ -22,6 +36,7 @@
     ],
     "plugins": [
       "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
       "@semantic-release/github"
     ]
   }
